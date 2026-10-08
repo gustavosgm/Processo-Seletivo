@@ -9,7 +9,11 @@ interface ProductCardProps {
 function ProductCard({ product, onSelect }: ProductCardProps) {
   return (
     <li className="product-card">
-      <div className="product-card__button">
+      <button
+        type="button"
+        className="product-card__button"
+        onClick={() => onSelect(product)}
+      >
         <div className="product-card__image">
           <img src={product.photo} alt={product.productName} loading="lazy" />
         </div>
@@ -19,14 +23,8 @@ function ProductCard({ product, onSelect }: ProductCardProps) {
           ou 2x de {formatPrice(Math.round(product.price / 2))} sem juros
         </p>
         <p className="product-card__shipping">Frete grátis</p>
-        <button
-          type="button"
-          className="product-card__buy"
-          onClick={() => onSelect(product)}
-        >
-          COMPRAR
-        </button>
-      </div>
+        <span className="product-card__buy">COMPRAR</span>
+      </button>
     </li>
   )
 }

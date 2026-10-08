@@ -2,11 +2,11 @@ function Hero() {
   return (
     <section className="hero">
       <div className="hero__content">
-        <h2>
+        <h1>
           Venha conhecer nossas
           <br />
           promoções
-        </h2>
+        </h1>
         <p>
           <strong>50% Off</strong> nos produtos
         </p>
