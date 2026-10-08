@@ -1,31 +1,100 @@
 # Teste Econverse: Vaga Desenvolvedor Front-End
 
-### Vem ser #Econverse!
+Página de vitrine de produtos desenvolvida com React, TypeScript e Sass, conforme as especificações do teste.
 
-Segue abaixo as instruções para a execução do teste.
+## Tecnologias
 
-## Instruções
-- Faça um fork desse projeto para a sua conta pessoal do GitHub.
-- Desenvolva a página conforme as **Especificações Técnicas** 
-- Crie um README com as instruções para compilar, testar e rodar o projeto.
-- O link do repositório deverá ser enviado para o e-mail gustavo.cipriano@econverse.com.br com o título **Teste Vaga FrontEnd**
+- [React 19](https://react.dev/) com [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vite.dev/) como bundler e servidor de desenvolvimento
+- [Sass](https://sass-lang.com/) para os estilos
+- [oxlint](https://oxc.rs/docs/guide/usage/linter) para análise estática
+- Sem bibliotecas de UI (Bootstrap, Foundation etc.)
 
-## Especificações Técnicas
-- Desenvolver a pagina em React e TypeScript conforme o [layout](https://www.figma.com/file/rWnzPeoxgynuNPsJjV0VmV/Teste-Front-End-Jr?node-id=0%3A1). Para conseguir pegar os elementos do Figma, basta copiar o layout para sua conta que terá acesso de edição.
-- Montar a [vitrine](https://app.econverse.com.br/teste-front-end/junior/tecnologia/layout/vitrine-produtos.png) de produtos consumindo as informações dos produtos em json atraves desse [Link](https://app.econverse.com.br/teste-front-end/junior/tecnologia/lista-produtos/produtos.json).
-- Desenvolver a interação ao clicar em um produto conforme layout. A interação consiste em abrir um modal com as principais informações do produto presente no arquivo [JSON](https://app.econverse.com.br/teste-front-end/junior/tecnologia/lista-produtos/produtos.json) conforme o produto que clicar.
-- Utilizar Pré-processador Sass, Less ou Stylus.
-- Respeitar o Layout pixel a pixel, tamanho das fontes, cores e botões.
-- Não Utilizar bibliotecas UI como Bootstrap, Foundation, ou afins.
+## Pré-requisitos
 
-## Pontos Extras
-- Utilizar Boas práticas de SEO
-- Uso de HTML semântico
+- [Node.js](https://nodejs.org/) 20.19 ou superior, ou 22.12 ou superior (exigência do Vite 8)
+- npm (instalado junto com o Node.js)
 
-## O que avaliaremos em seu teste
-- Organização do projeto
-- Lógica do código
-- Componentização
-- Alcance dos objetivos propostos
+## Instalação
 
-**Boa sorte! ;)**
+```bash
+npm install
+```
+
+## Scripts
+
+| Comando           | Descrição                                                        |
+| ----------------- | ---------------------------------------------------------------- |
+| `npm run dev`     | Inicia o servidor de desenvolvimento em `http://localhost:5173`  |
+| `npm run build`   | Verifica os tipos com `tsc` e gera a versão de produção em `dist/` |
+| `npm run preview` | Serve localmente a versão gerada pelo `build`                    |
+| `npm run lint`    | Executa o oxlint sobre o código                                  |
+
+## Deploy
+
+O site está publicado em Cloudflare Workers, com Static Assets:
+
+<https://processo-seletivo.processo-seletivo.workers.dev>
+
+Para publicar uma nova versão, faça login no Wrangler uma vez e execute o deploy, que gera o `dist/` antes de enviar:
+
+```bash
+npx wrangler login
+npm run build
+npx wrangler deploy
+```
+
+A configuração está em `wrangler.jsonc`.
+
+## Testes
+
+O projeto ainda não possui testes automatizados. As verificações disponíveis são a checagem de tipos e o lint:
+
+```bash
+npm run build
+npm run lint
+```
+
+## Fonte dos dados
+
+A vitrine lê os produtos do arquivo `produtos.json`, disponível em:
+
+<https://app.econverse.com.br/teste-front-end/junior/tecnologia/lista-produtos/produtos.json>
+
+O serviço (`src/services/productService.ts`) tenta carregar essa URL primeiro. Como o servidor não envia o cabeçalho CORS, o navegador pode bloquear a requisição. Nesse caso, a aplicação usa a cópia local em `public/data/produtos.json`, com o mesmo conteúdo.
+
+## Estrutura do projeto
+
+```
+src/
+├── components/
+│   ├── BrandSection/       Seção "Navegue por marcas"
+│   ├── CategoryMenu/       Ícones de departamentos
+│   ├── CategoryTabs/       Abas de categorias da vitrine
+│   ├── Footer/             Newsletter e rodapé
+│   ├── Header/             Barra superior, busca, ícones e menu
+│   ├── Hero/               Banner principal
+│   ├── PartnerBanners/     Cards "Parceiros"
+│   ├── ProductCard/        Card de produto
+│   ├── ProductCarousel/    Lista de produtos com setas de navegação
+│   ├── ProductModal/       Modal com detalhes e quantidade
+│   └── ProductSection/     Título, abas ou link e carrossel de produtos
+├── services/
+│   └── productService.ts   Busca os produtos (API com fallback local)
+├── types/
+│   └── product.ts          Tipos do JSON de produtos
+├── utils/
+│   └── formatPrice.ts      Formatação de preço em reais
+├── App.tsx                 Composição da página
+├── index.scss              Estilos globais e de componentes
+└── main.tsx                Ponto de entrada
+public/
+├── data/produtos.json      Cópia local dos produtos
+└── ...                     Imagens usadas no layout
+```
+
+## Observações
+
+- Os preços vêm do JSON em centavos e são exibidos em reais.
+- As seções de categorias, parcelamento, frete e os textos de descrição usam conteúdo de exemplo, conforme o layout de referência.
+- O botão COMPRAR abre o modal de detalhes; a compra em si não é implementada.
