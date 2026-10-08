@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import type { Product } from '../../types/product'
 import { formatPrice } from '../../utils/formatPrice'
 
@@ -7,7 +7,12 @@ interface ProductModalProps {
   onClose: () => void
 }
 
+const DESCRIPTION_PLACEHOLDER =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+
 function ProductModal({ product, onClose }: ProductModalProps) {
+  const [quantity, setQuantity] = useState(1)
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose()
@@ -34,11 +39,42 @@ function ProductModal({ product, onClose }: ProductModalProps) {
         >
           ×
         </button>
-        <img src={product.photo} alt={product.productName} />
+
+        <div className="modal__image">
+          <img src={product.photo} alt={product.productName} />
+        </div>
+
         <div className="modal__content">
           <h2 id="modal-title">{product.productName}</h2>
-          <p>{product.descriptionShort}</p>
           <p className="modal__price">{formatPrice(product.price)}</p>
+          <p className="modal__description">{DESCRIPTION_PLACEHOLDER}</p>
+          <a href="#" className="modal__details">
+            Veja mais detalhes do produto &gt;
+          </a>
+
+          <div className="modal__buy">
+            <div className="modal__quantity">
+              <button
+                type="button"
+                aria-label="Diminuir quantidade"
+                disabled={quantity === 1}
+                onClick={() => setQuantity((value) => value - 1)}
+              >
+                −
+              </button>
+              <span>{String(quantity).padStart(2, '0')}</span>
+              <button
+                type="button"
+                aria-label="Aumentar quantidade"
+                onClick={() => setQuantity((value) => value + 1)}
+              >
+                +
+              </button>
+            </div>
+            <button type="button" className="modal__buy-button">
+              COMPRAR
+            </button>
+          </div>
         </div>
       </div>
     </div>

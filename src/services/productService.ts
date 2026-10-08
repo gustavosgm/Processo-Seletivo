@@ -1,9 +1,11 @@
 import type { Product, ProductsResponse } from '../types/product'
 
-const PRODUCTS_URL = `${import.meta.env.BASE_URL}data/produtos.json`
+const PRODUCTS_API_URL =
+  'https://app.econverse.com.br/teste-front-end/junior/tecnologia/lista-produtos/produtos.json'
+const PRODUCTS_LOCAL_URL = `${import.meta.env.BASE_URL}data/produtos.json`
 
-export async function fetchProducts(): Promise<Product[]> {
-  const response = await fetch(PRODUCTS_URL)
+async function requestProducts(url: string): Promise<Product[]> {
+  const response = await fetch(url)
 
   if (!response.ok) {
     throw new Error(`Erro ao buscar produtos (${response.status})`)
@@ -16,4 +18,12 @@ export async function fetchProducts(): Promise<Product[]> {
   }
 
   return data.products
+}
+
+export async function fetchProducts(): Promise<Product[]> {
+  try {
+    return await requestProducts(PRODUCTS_API_URL)
+  } catch {
+    return requestProducts(PRODUCTS_LOCAL_URL)
+  }
 }

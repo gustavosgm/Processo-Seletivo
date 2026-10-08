@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react'
-import ProductList from './components/ProductList/ProductList'
+import CategoryMenu from './components/CategoryMenu/CategoryMenu'
+import BrandSection from './components/BrandSection/BrandSection'
+import Footer from './components/Footer/Footer'
+import Header from './components/Header/Header'
+import Hero from './components/Hero/Hero'
+import PartnerBanners from './components/PartnerBanners/PartnerBanners'
 import ProductModal from './components/ProductModal/ProductModal'
+import ProductSection from './components/ProductSection/ProductSection'
 import { fetchProducts } from './services/productService'
 import type { Product } from './types/product'
 
@@ -20,19 +26,38 @@ function App() {
   }, [])
 
   return (
-    <main>
-      <h1>Vitrine de produtos</h1>
+    <>
+      <Header />
+      <Hero />
+      <CategoryMenu />
 
-      {loading && <p>Carregando produtos...</p>}
-      {error && <p role="alert">{error}</p>}
-      {!loading && !error && (
-        <ProductList products={products} onSelect={setSelected} />
-      )}
+      <main>
+        {loading && <p>Carregando produtos...</p>}
+        {error && <p role="alert">{error}</p>}
 
-      {selected && (
-        <ProductModal product={selected} onClose={() => setSelected(null)} />
-      )}
-    </main>
+        {!loading && !error && (
+          <>
+            <ProductSection
+              id="produtos"
+              products={products}
+              onSelect={setSelected}
+              showTabs
+            />
+            <PartnerBanners />
+            <ProductSection products={products} onSelect={setSelected} />
+            <PartnerBanners />
+            <BrandSection />
+            <ProductSection products={products} onSelect={setSelected} />
+          </>
+        )}
+
+        {selected && (
+          <ProductModal product={selected} onClose={() => setSelected(null)} />
+        )}
+      </main>
+
+      <Footer />
+    </>
   )
 }
 
